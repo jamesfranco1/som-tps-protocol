@@ -46,7 +46,7 @@ export default function WalletPanel({
   const burnShare = creatorShare;
 
   const hasToken = config && !isNativeMint(config.tokenMint);
-  const payLabel = payWith === "sol" ? "SOL" : "FLOW";
+  const payLabel = payWith === "sol" ? "SOL" : "flow";
 
   useEffect(() => setMounted(true), []);
 
@@ -157,7 +157,7 @@ export default function WalletPanel({
             )}
             {hasToken && tokenBalance !== null && (
               <div>
-                FLOW: <b>{tokenBalance.toFixed(4)}</b>
+                flow: <b>{tokenBalance.toFixed(4)}</b>
               </div>
             )}
           </div>
@@ -182,7 +182,7 @@ export default function WalletPanel({
                     : "border-neutral-700 text-gray-400 hover:text-white"
                 }`}
               >
-                Pay with FLOW
+                Pay with flow
               </button>
             </div>
           )}

@@ -2,7 +2,7 @@ import "./../styles/globals.css";
 import Providers from "./providers";
 
 export const metadata = {
-  title: "Flow402x",
+  title: "flow402x",
   description:
     "Pay-per-second streaming content on Solana. Watch, create, and earn.",
 };
@@ -26,7 +26,7 @@ function Header() {
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
         <a href="/" className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-gray-300 shadow-[0_0_12px_rgba(255,255,255,0.3)]" />
-          <span className="font-semibold tracking-tight">Flow402x</span>
+          <span className="font-semibold tracking-tight">flow402x</span>
         </a>
         <div className="flex items-center gap-6 text-sm text-gray-300">
           <a
