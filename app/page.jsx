@@ -51,16 +51,16 @@ export default function Landing() {
           </p>
 
           <div className="flex gap-4 justify-center">
-            <a href="/browse" className="button-primary">
-              Browse Content
-            </a>
             <button
               onClick={handleDemo}
               disabled={demoLoading}
-              className="button-secondary"
+              className="button-primary"
             >
               View Demo
             </button>
+            <a href="#agents" className="button-secondary">
+              Connect Your Agent
+            </a>
           </div>
         </div>
       </section>
@@ -215,8 +215,8 @@ export default function Landing() {
                 analysis, or video — via the API or dashboard.
               </li>
               <li>
-                <b>Connect:</b> Viewer connects their Solana wallet and wraps a
-                small amount of SOL (or uses the flow token).
+                <b>Connect:</b> Viewer connects their Solana wallet and pays
+                upfront in SOL or streams the flow token per second.
               </li>
               <li>
                 <b>Stream:</b> The gateway transfers tokens each second — 50% to

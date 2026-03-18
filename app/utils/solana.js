@@ -4,65 +4,56 @@ import {
   PublicKey,
   Transaction,
   SystemProgram,
-  LAMPORTS_PER_SOL,
+  TransactionInstruction,
 } from "@solana/web3.js";
 import {
   NATIVE_MINT,
   getAssociatedTokenAddress,
   createAssociatedTokenAccountInstruction,
-  createSyncNativeInstruction,
   createApproveCheckedInstruction,
 } from "@solana/spl-token";
-
-const WSOL_DECIMALS = 9;
 
 export function isNativeMint(mintStr) {
   return !mintStr || mintStr === "" || mintStr === "WSOL" || mintStr === NATIVE_MINT.toString();
 }
 
-export async function wrapAndApprove({
+export async function payUpfrontSOL({
   userPublicKey,
   sendTransaction,
   connection,
-  gatewayPubkey,
-  amountLamports = LAMPORTS_PER_SOL,
+  creatorWallet,
+  agentWallet,
+  amountLamports,
 }) {
-  if (!gatewayPubkey) {
-    throw new Error("Missing NEXT_PUBLIC_GATEWAY_PUBKEY");
-  }
-
   const user = new PublicKey(userPublicKey);
-  const gateway = new PublicKey(gatewayPubkey);
-  const userAta = await getAssociatedTokenAddress(NATIVE_MINT, user);
+  const creator = new PublicKey(creatorWallet);
+
+  const creatorAmount = Math.floor(amountLamports / 2);
+  const agentAmount = amountLamports - creatorAmount;
 
   const tx = new Transaction();
 
-  const ataInfo = await connection.getAccountInfo(userAta);
-  if (!ataInfo) {
+  tx.add(
+    SystemProgram.transfer({ fromPubkey: user, toPubkey: creator, lamports: creatorAmount })
+  );
+
+  if (agentWallet) {
+    const agent = new PublicKey(agentWallet);
     tx.add(
-      createAssociatedTokenAccountInstruction(user, userAta, user, NATIVE_MINT)
+      SystemProgram.transfer({ fromPubkey: user, toPubkey: agent, lamports: agentAmount })
+    );
+  } else {
+    tx.add(
+      SystemProgram.transfer({ fromPubkey: user, toPubkey: creator, lamports: agentAmount })
     );
   }
 
   tx.add(
-    SystemProgram.transfer({
-      fromPubkey: user,
-      toPubkey: userAta,
-      lamports: amountLamports,
+    new TransactionInstruction({
+      keys: [],
+      programId: new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
+      data: Buffer.from(`flow402x-upfront-${Date.now()}`),
     })
-  );
-
-  tx.add(createSyncNativeInstruction(userAta));
-
-  tx.add(
-    createApproveCheckedInstruction(
-      userAta,
-      NATIVE_MINT,
-      gateway,
-      user,
-      amountLamports,
-      WSOL_DECIMALS
-    )
   );
 
   const sig = await sendTransaction(tx, connection, { skipPreflight: false });

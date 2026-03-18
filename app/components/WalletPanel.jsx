@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
 import dynamic from "next/dynamic";
 import {
-  wrapAndApprove,
+  payUpfrontSOL,
   approveToken,
   isNativeMint,
   getTokenBalance,
@@ -17,6 +17,12 @@ const WalletMultiButtonDynamic = dynamic(
 );
 
 const API = process.env.NEXT_PUBLIC_API_URL || "";
+
+const DURATIONS = [
+  { label: "1 min", seconds: 60 },
+  { label: "5 min", seconds: 300 },
+  { label: "10 min", seconds: 600 },
+];
 
 export default function WalletPanel({
   content,
@@ -32,6 +38,7 @@ export default function WalletPanel({
   const [mounted, setMounted] = useState(false);
   const [payWith, setPayWith] = useState("sol");
   const [config, setConfig] = useState(null);
+  const [duration, setDuration] = useState(DURATIONS[0]);
 
   const gatewayPubkey = useMemo(
     () => process.env.NEXT_PUBLIC_GATEWAY_PUBKEY || "",
@@ -39,14 +46,17 @@ export default function WalletPanel({
   );
 
   const ratePerSecond = content?.ratePerSecond || 1000;
-  const decimals = config?.tokenDecimals || 9;
-  const divisor = Math.pow(10, decimals);
-  const rateDisplay = (ratePerSecond / divisor).toFixed(6);
-  const creatorShare = (ratePerSecond / 2 / divisor).toFixed(6);
-  const burnShare = creatorShare;
-
   const hasToken = config && !isNativeMint(config.tokenMint);
-  const payLabel = payWith === "sol" ? "SOL" : "flow";
+
+  const solCostLamports = ratePerSecond * duration.seconds;
+  const solCostDisplay = (solCostLamports / 1e9).toFixed(6);
+  const solCreatorShare = (Math.floor(solCostLamports / 2) / 1e9).toFixed(6);
+  const solBurnShare = ((solCostLamports - Math.floor(solCostLamports / 2)) / 1e9).toFixed(6);
+
+  const tokenDecimals = config?.tokenDecimals || 9;
+  const tokenDivisor = Math.pow(10, tokenDecimals);
+  const tokenRateDisplay = (ratePerSecond / tokenDivisor).toFixed(6);
+  const tokenCreatorShare = (ratePerSecond / 2 / tokenDivisor).toFixed(6);
 
   useEffect(() => setMounted(true), []);
 
@@ -85,29 +95,41 @@ export default function WalletPanel({
     };
   }, [connected, publicKey, connection, hasToken, config]);
 
-  async function handleApprove() {
+  async function handlePaySOL() {
     if (!connected || !publicKey) return;
     setBusy(true);
     try {
-      if (payWith === "token" && hasToken) {
-        await approveToken({
-          userPublicKey: publicKey,
-          sendTransaction,
-          connection,
-          gatewayPubkey,
-          tokenMint: config.tokenMint,
-          tokenDecimals: config.tokenDecimals,
-          amount: ratePerSecond * 600,
-        });
-      } else {
-        await wrapAndApprove({
-          userPublicKey: publicKey,
-          sendTransaction,
-          connection,
-          gatewayPubkey,
-          amountLamports: ratePerSecond * 600,
-        });
-      }
+      await payUpfrontSOL({
+        userPublicKey: publicKey,
+        sendTransaction,
+        connection,
+        creatorWallet: content.creatorWallet,
+        agentWallet: config?.agentWallet || null,
+        amountLamports: solCostLamports,
+      });
+
+      if (onApprovalSuccess) onApprovalSuccess({ mode: "upfront", durationSeconds: duration.seconds });
+    } catch (e) {
+      console.error(e);
+      alert("Payment failed: " + e.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handleApproveToken() {
+    if (!connected || !publicKey) return;
+    setBusy(true);
+    try {
+      await approveToken({
+        userPublicKey: publicKey,
+        sendTransaction,
+        connection,
+        gatewayPubkey,
+        tokenMint: config.tokenMint,
+        tokenDecimals: config.tokenDecimals,
+        amount: ratePerSecond * 600,
+      });
 
       await fetch(`${API}/start`, {
         method: "POST",
@@ -115,10 +137,11 @@ export default function WalletPanel({
         body: JSON.stringify({
           userPubkey: publicKey.toString(),
           creatorWallet: content.creatorWallet,
+          paymentMint: config.tokenMint,
         }),
       });
 
-      if (onApprovalSuccess) onApprovalSuccess();
+      if (onApprovalSuccess) onApprovalSuccess({ mode: "streaming" });
     } catch (e) {
       console.error(e);
       alert("Approval failed: " + e.message);
@@ -187,43 +210,91 @@ export default function WalletPanel({
             </div>
           )}
 
-          <div className="text-sm text-gray-300 mb-2">
-            Rate: <b>{rateDisplay} {payLabel}/s</b>
-          </div>
-          <div className="text-xs text-gray-500 mb-4 space-y-1">
-            <div>
-              Creator: {creatorShare} {payLabel}/s &middot; Burn: {burnShare}{" "}
-              {payLabel}/s
-            </div>
-          </div>
+          {payWith === "sol" ? (
+            <>
+              <div className="text-xs text-gray-500 mb-2">Select duration</div>
+              <div className="flex gap-2 mb-4">
+                {DURATIONS.map((d) => (
+                  <button
+                    key={d.seconds}
+                    onClick={() => setDuration(d)}
+                    className={`text-xs px-3 py-1.5 rounded border transition ${
+                      duration.seconds === d.seconds
+                        ? "border-white text-white bg-white/5"
+                        : "border-neutral-700 text-gray-400 hover:text-white"
+                    }`}
+                  >
+                    {d.label}
+                  </button>
+                ))}
+              </div>
 
-          <div className="flex gap-3">
-            <button
-              className="button-primary disabled:opacity-50"
-              disabled={!connected || isStreaming || busy}
-              onClick={handleApprove}
-            >
-              {busy
-                ? "Approving\u2026"
-                : isStreaming
-                ? "Streaming Active"
-                : "Approve & Start"}
-            </button>
+              <div className="text-sm text-gray-300 mb-2">
+                Total: <b>{solCostDisplay} SOL</b>
+                <span className="text-gray-500 text-xs ml-2">for {duration.label}</span>
+              </div>
+              <div className="text-xs text-gray-500 mb-4 space-y-1">
+                <div>
+                  Creator: {solCreatorShare} SOL &middot; Burn: {solBurnShare} SOL
+                </div>
+              </div>
 
-            <button
-              className="button-stop disabled:opacity-50"
-              disabled={!isStreaming}
-              onClick={handleStop}
-            >
-              Stop
-            </button>
-          </div>
+              <div className="flex gap-3">
+                <button
+                  className="button-primary disabled:opacity-50"
+                  disabled={!connected || isStreaming || busy}
+                  onClick={handlePaySOL}
+                >
+                  {busy ? "Paying\u2026" : isStreaming ? "Access Active" : `Pay ${solCostDisplay} SOL`}
+                </button>
+              </div>
 
-          <p className="text-xs text-gray-500 mt-3">
-            {isStreaming
-              ? "Streaming payments active \u2014 paying per second."
-              : "Grant permission to start streaming token payments."}
-          </p>
+              <p className="text-xs text-gray-500 mt-3">
+                {isStreaming
+                  ? "Content unlocked."
+                  : "One-time payment. Content unlocks for the selected duration."}
+              </p>
+            </>
+          ) : (
+            <>
+              <div className="text-sm text-gray-300 mb-2">
+                Rate: <b>{tokenRateDisplay} flow/s</b>
+              </div>
+              <div className="text-xs text-gray-500 mb-4 space-y-1">
+                <div>
+                  Creator: {tokenCreatorShare} flow/s &middot; Burn: {tokenCreatorShare} flow/s
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  className="button-primary disabled:opacity-50"
+                  disabled={!connected || isStreaming || busy}
+                  onClick={handleApproveToken}
+                >
+                  {busy
+                    ? "Approving\u2026"
+                    : isStreaming
+                    ? "Streaming Active"
+                    : "Approve & Start"}
+                </button>
+
+                <button
+                  className="button-stop disabled:opacity-50"
+                  disabled={!isStreaming}
+                  onClick={handleStop}
+                >
+                  Stop
+                </button>
+              </div>
+
+              <p className="text-xs text-gray-500 mt-3">
+                {isStreaming
+                  ? "Streaming payments active \u2014 paying per second."
+                  : "Grant permission to start streaming flow token payments."}
+              </p>
+            </>
+          )}
         </>
       )}
     </div>

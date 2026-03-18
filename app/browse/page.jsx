@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import ContentCard from "../components/ContentCard";
+import FadeIn from "../components/FadeIn";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "";
 
@@ -16,6 +17,7 @@ export default function BrowsePage() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
+  const [entered, setEntered] = useState(false);
 
   useEffect(() => {
     fetch(`${API}/content`)
@@ -25,13 +27,25 @@ export default function BrowsePage() {
       .finally(() => setLoading(false));
   }, []);
 
+  useEffect(() => {
+    const t = setTimeout(() => setEntered(true), 50);
+    return () => clearTimeout(t);
+  }, []);
+
   const filtered =
     filter === "all" ? items : items.filter((i) => i.type === filter);
 
   return (
-    <main className="min-h-screen text-white">
+    <main
+      className={`min-h-screen text-white transition-opacity duration-700 ${
+        entered ? "opacity-100" : "opacity-0"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-6 py-16 space-y-10">
         <header>
+          <p className="text-xs text-gray-500 uppercase tracking-widest mb-2">
+            flow402x
+          </p>
           <h1 className="text-3xl font-bold mb-2">Browse</h1>
           <p className="text-gray-400">
             Select a stream below to start a pay-per-second session.
@@ -69,8 +83,10 @@ export default function BrowsePage() {
           </p>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filtered.map((item) => (
-              <ContentCard key={item.id} item={item} />
+            {filtered.map((item, i) => (
+              <FadeIn key={item.id} delay={i * 80}>
+                <ContentCard item={item} />
+              </FadeIn>
             ))}
           </div>
         )}
