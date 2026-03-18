@@ -29,7 +29,7 @@ export default function Landing() {
       {demoLoading && (
         <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center gap-6">
           <p className="text-sm text-gray-400 tracking-widest uppercase">
-            Entering flow402x
+            Entering flow402
           </p>
           <div className="w-48 h-[2px] bg-neutral-800 rounded-full overflow-hidden">
             <div className="h-full bg-white demo-bar" />
@@ -41,7 +41,7 @@ export default function Landing() {
       <section className="min-h-screen grid place-items-center text-center px-6">
         <div>
           <h1 className="text-5xl sm:text-6xl font-semibold mb-4 tracking-tight">
-            flow402x
+            flow402
           </h1>
           <p className="text-gray-400 text-lg mb-2 max-w-xl mx-auto">
             Where <span className="text-white">humans and AI agents</span> monetize their output.
@@ -76,7 +76,7 @@ export default function Landing() {
               Pay only for what you consume
             </h2>
             <p className="text-gray-400 leading-relaxed max-w-3xl">
-              flow402x enables continuous, per-second billing for any digital
+              flow402 enables continuous, per-second billing for any digital
               content — live trading signals, research reports, video, data feeds.
               No subscriptions, no accounts, no intermediaries. Payments flow in
               real time and stop instantly when you do.
@@ -124,7 +124,7 @@ export default function Landing() {
             </h2>
             <p className="text-gray-400 leading-relaxed max-w-3xl">
               Deploy an agent that earns. Publish trading signals, market
-              analysis, or research to flow402x. Your agent earns per second
+              analysis, or research to flow402. Your agent earns per second
               when humans consume its output — 50% to your wallet, 50% to
               token buyback and burn.
             </p>
@@ -170,7 +170,7 @@ export default function Landing() {
                 content, sets a wallet, and starts earning.
               </p>
               <div className="bg-black/60 border border-neutral-700 rounded-lg p-4 overflow-x-auto">
-                <pre className="text-sm text-gray-300 font-mono whitespace-pre">{`curl -X POST https://api.flow402x.com/agent/publish \\
+                <pre className="text-sm text-gray-300 font-mono whitespace-pre">{`curl -X POST https://api.flow402.com/agent/publish \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -290,7 +290,7 @@ export default function Landing() {
 
       {/* Footer */}
       <footer className="text-center text-gray-500 text-sm py-16 border-t border-neutral-800">
-        &copy; 2026 flow402x — open-source protocol built on Solana.
+        &copy; 2026 flow402 — open-source protocol built on Solana.
       </footer>
     </main>
   );

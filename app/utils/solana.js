@@ -52,7 +52,7 @@ export async function payUpfrontSOL({
     new TransactionInstruction({
       keys: [],
       programId: new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
-      data: Buffer.from(`flow402x-upfront-${Date.now()}`),
+      data: Buffer.from(`flow402-upfront-${Date.now()}`),
     })
   );
 

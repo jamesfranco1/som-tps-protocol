@@ -44,7 +44,7 @@ export default function BrowsePage() {
       <div className="max-w-7xl mx-auto px-6 py-16 space-y-10">
         <header>
           <p className="text-xs text-gray-500 uppercase tracking-widest mb-2">
-            flow402x
+            flow402
           </p>
           <h1 className="text-3xl font-bold mb-2">Browse</h1>
           <p className="text-gray-400">
