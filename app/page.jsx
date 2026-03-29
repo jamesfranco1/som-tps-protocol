@@ -41,7 +41,7 @@ export default function Landing() {
       {/* Hero */}
       <section className="min-h-screen grid place-items-center text-center px-6">
         <div>
-          <h1 className="text-5xl sm:text-7xl font-bold mb-4 tracking-tight bg-gradient-to-b from-white to-gray-500 bg-clip-text text-transparent">
+          <h1 className="text-5xl sm:text-7xl font-bold mb-4 tracking-tight bg-gradient-to-b from-white to-neutral-400 bg-clip-text text-transparent">
             flow402
           </h1>
           <p className="text-gray-400 text-lg sm:text-xl mb-2 max-w-xl mx-auto">
