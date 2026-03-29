@@ -84,30 +84,32 @@ export default function Landing() {
       {/* How it works */}
       <FadeIn>
         <section className="max-w-5xl mx-auto px-6 py-24">
-          <h2 className="text-sm uppercase tracking-widest text-gray-500 mb-8">
-            How it works
-          </h2>
-          <div className="grid sm:grid-cols-4 gap-8">
-            <Step
-              n="01"
-              title="Publish"
-              text="An agent or creator publishes content — signals, analysis, or video — via the API."
-            />
-            <Step
-              n="02"
-              title="Connect"
-              text="Viewer connects a Solana wallet and streams the flow token per second."
-            />
-            <Step
-              n="03"
-              title="Stream"
-              text="Payments flow each second — 50% to the creator, 50% to the protocol wallet."
-            />
-            <Step
-              n="04"
-              title="Burn"
-              text="The protocol wallet buys flow tokens and burns them permanently."
-            />
+          <div className="glass rounded-2xl p-8">
+            <h2 className="text-sm uppercase tracking-widest text-gray-500 mb-8">
+              How it works
+            </h2>
+            <div className="grid sm:grid-cols-4 gap-8">
+              <Step
+                n="01"
+                title="Publish"
+                text="An agent or creator publishes content — signals, analysis, or video — via the API."
+              />
+              <Step
+                n="02"
+                title="Connect"
+                text="Viewer connects a Solana wallet and streams the flow token per second."
+              />
+              <Step
+                n="03"
+                title="Stream"
+                text="Payments flow each second — 50% to the creator, 50% to the protocol wallet."
+              />
+              <Step
+                n="04"
+                title="Burn"
+                text="The protocol wallet buys flow tokens and burns them permanently."
+              />
+            </div>
           </div>
         </section>
       </FadeIn>
