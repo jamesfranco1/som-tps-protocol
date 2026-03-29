@@ -1,5 +1,6 @@
 import "./../styles/globals.css";
 import Providers from "./providers";
+import VantaBackground from "./components/VantaBackground";
 
 export const metadata = {
   title: "flow402",
@@ -14,11 +15,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-gradient-to-b from-black via-[#0a0a0a] to-black text-white antialiased">
-        <Providers>
-          <Header />
-          <div className="pt-20">{children}</div>
-        </Providers>
+      <body className="relative min-h-screen overflow-x-hidden bg-black text-white antialiased">
+        <VantaBackground />
+        <div className="relative z-10">
+          <Providers>
+            <Header />
+            <div className="pt-20">{children}</div>
+          </Providers>
+        </div>
       </body>
     </html>
   );

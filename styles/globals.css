@@ -2,15 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body {
+  min-height: 100%;
+}
+
 body {
   @apply bg-black text-white antialiased;
-  background: radial-gradient(
-      circle at top right,
-      rgba(30, 30, 40, 0.3) 0%,
-      rgba(0, 0, 0, 1) 70%
-    ),
-    linear-gradient(to bottom, #050505, #000);
-  background-attachment: fixed;
+  background: #000;
+  overflow-x: hidden;
 }
 
 .glass {
