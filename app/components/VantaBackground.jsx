@@ -7,26 +7,19 @@ export default function VantaBackground() {
 
   useEffect(() => {
     let effect;
-    let isMounted = true;
+    let cancelled = false;
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return undefined;
-    }
+    async function init() {
+      const p5 = (await import("p5")).default;
+      window.p5 = p5;
 
-    const initEffect = async () => {
-      const [p5Module, topologyModule] = await Promise.all([
-        import("p5"),
-        import("vanta/dist/vanta.topology.min"),
-      ]);
+      const TOPOLOGY = (await import("vanta/dist/vanta.topology.min")).default;
 
-      if (!isMounted || !containerRef.current) {
-        return;
-      }
+      if (cancelled || !containerRef.current) return;
 
-      window.p5 = p5Module.default;
-
-      effect = topologyModule.default({
+      effect = TOPOLOGY({
         el: containerRef.current,
+        p5,
         mouseControls: true,
         touchControls: true,
         gyroControls: false,
@@ -35,17 +28,15 @@ export default function VantaBackground() {
         scale: 1,
         scaleMobile: 1,
         color: 0x646464,
-        backgroundColor: 0x0,
+        backgroundColor: 0x000000,
       });
-    };
+    }
 
-    initEffect().catch(() => {});
+    init().catch(console.error);
 
     return () => {
-      isMounted = false;
-      if (effect) {
-        effect.destroy();
-      }
+      cancelled = true;
+      if (effect) effect.destroy();
     };
   }, []);
 
@@ -55,8 +46,6 @@ export default function VantaBackground() {
       className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
     >
       <div ref={containerRef} className="absolute inset-0" />
-      <div className="absolute inset-0 bg-black/40" />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/60" />
     </div>
   );
 }

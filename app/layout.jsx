@@ -30,7 +30,7 @@ export default function RootLayout({ children }) {
 
 function Header() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-20 bg-black/40 backdrop-blur-md border-b border-neutral-800">
+    <header className="fixed top-0 left-0 right-0 z-20 bg-black/30 backdrop-blur-xl border-b border-neutral-700/40">
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
         <a href="/" className="flex items-center gap-2">
           <img src="/flowpfp.png" alt="flow402" className="w-6 h-6 rounded" />
