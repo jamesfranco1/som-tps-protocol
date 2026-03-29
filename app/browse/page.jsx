@@ -41,26 +41,24 @@ export default function BrowsePage() {
         entered ? "opacity-100" : "opacity-0"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 py-16 space-y-10">
+      <div className="mx-auto max-w-7xl space-y-10 px-6 py-16">
         <header>
-          <p className="text-xs text-gray-500 uppercase tracking-widest mb-2">
-            flow402
-          </p>
-          <h1 className="text-3xl font-bold mb-2">Browse</h1>
-          <p className="text-gray-400">
+          <div className="eyebrow mb-4">Library</div>
+          <h1 className="mb-3 text-3xl font-semibold tracking-tight text-white md:text-4xl">Browse</h1>
+          <p className="max-w-2xl text-muted">
             Select a stream below to start a pay-per-second session.
           </p>
         </header>
 
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {FILTERS.map((f) => (
             <button
               key={f.key}
               onClick={() => setFilter(f.key)}
-              className={`text-sm px-4 py-1.5 rounded-lg border transition ${
+              className={`rounded-full border px-4 py-2 text-sm transition ${
                 filter === f.key
-                  ? "border-white text-white bg-white/5"
-                  : "border-neutral-700 text-gray-400 hover:text-white hover:border-neutral-500"
+                  ? "border-white/15 bg-white/[0.08] text-white"
+                  : "border-white/8 text-muted hover:border-white/16 hover:text-white"
               }`}
             >
               {f.label}
@@ -73,14 +71,15 @@ export default function BrowsePage() {
             {[1, 2, 3].map((n) => (
               <div
                 key={n}
-                className="glass animate-pulse aspect-[4/3] rounded-xl"
+                className="glass aspect-[4/3] animate-pulse"
               />
             ))}
           </div>
         ) : filtered.length === 0 ? (
-          <p className="text-gray-500 text-center py-24">
-            No content available yet.
-          </p>
+          <div className="glass mx-auto max-w-2xl px-6 py-20 text-center">
+            <p className="text-lg font-medium text-white">No content available yet.</p>
+            <p className="mt-3 text-sm text-muted">New streams, analysis, and video will appear here once they are published.</p>
+          </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filtered.map((item, i) => (

@@ -18,9 +18,9 @@ export default function ContentCard({ item }) {
   return (
     <a
       href={`/watch/${item.id}`}
-      className="glass rounded-xl overflow-hidden hover:scale-[1.02] transition-transform duration-300 group block"
+      className="glass block overflow-hidden transition duration-300 hover:-translate-y-1 hover:border-white/16 hover:shadow-panel group"
     >
-      <div className="relative w-full aspect-[16/9] overflow-hidden bg-neutral-800">
+      <div className="relative aspect-[16/9] w-full overflow-hidden bg-neutral-900">
         {hasThumbnail ? (
           <img
             src={item.thumbnailUrl}
@@ -28,34 +28,38 @@ export default function ContentCard({ item }) {
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center gap-2 px-4">
-            <span className="text-xs uppercase tracking-wider text-gray-500">
+          <div className="flex h-full w-full flex-col items-center justify-center gap-2 px-4">
+            <span className="text-xs uppercase tracking-wider text-soft">
               {typeLabel}
             </span>
-            <span className="text-gray-400 text-sm text-center">
-              {item.title}
+            <span className="max-w-[14rem] text-center text-sm text-muted">
+              Premium {typeLabel.toLowerCase()} access
             </span>
           </div>
         )}
+
+        <div className="absolute left-4 top-4 flex gap-2">
+          <span className="rounded-full border border-white/10 bg-black/45 px-2.5 py-1 text-[10px] uppercase tracking-[0.24em] text-white/75 backdrop-blur-md">
+            {typeLabel}
+          </span>
+          {item.isAgent && (
+            <span className="rounded-full border border-white/10 bg-white/[0.08] px-2.5 py-1 text-[10px] uppercase tracking-[0.24em] text-white/85 backdrop-blur-md">
+              Agent
+            </span>
+          )}
+        </div>
       </div>
+
       <div className="p-5 text-left">
-        <div className="flex items-center gap-2 mb-1">
+        <div className="mb-2 flex items-center gap-2">
           <h3 className="text-xl font-semibold">{item.title}</h3>
         </div>
-        <p className="text-gray-400 text-sm mb-3">{item.description}</p>
-        <div className="flex items-center justify-between text-xs text-gray-500">
+        <p className="mb-4 text-sm leading-6 text-muted">{item.description}</p>
+        <div className="flex items-center justify-between text-xs text-soft">
           <div className="flex items-center gap-2">
             <span>{item.creatorName}</span>
-            {item.isAgent && (
-              <span className="text-[10px] uppercase tracking-wider border border-neutral-700 px-1.5 py-0.5 rounded">
-                Agent
-              </span>
-            )}
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-[10px] uppercase tracking-wider border border-neutral-700 px-1.5 py-0.5 rounded">
-              {typeLabel}
-            </span>
             {minutes && <span>{minutes} min</span>}
           </div>
         </div>

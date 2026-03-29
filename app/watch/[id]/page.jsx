@@ -119,7 +119,7 @@ export default function WatchPage() {
   if (loading) {
     return (
       <main className="min-h-screen flex items-center justify-center">
-        <div className="glass animate-pulse w-full max-w-4xl aspect-video rounded-xl" />
+        <div className="glass h-full w-full max-w-4xl animate-pulse aspect-video" />
       </main>
     );
   }
@@ -127,11 +127,11 @@ export default function WatchPage() {
   if (!content) {
     return (
       <main className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-2">Content not found</h1>
+        <div className="glass px-8 py-10 text-center">
+          <h1 className="mb-2 text-2xl font-semibold">Content not found</h1>
           <a
             href="/browse"
-            className="text-gray-400 hover:text-white transition text-sm"
+            className="text-sm text-muted transition hover:text-white"
           >
             &larr; Back to browse
           </a>
@@ -149,38 +149,34 @@ export default function WatchPage() {
 
   return (
     <main className="min-h-screen text-white">
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="mx-auto max-w-7xl px-6 py-8">
         <a
           href="/browse"
-          className="text-sm text-gray-500 hover:text-white transition mb-6 inline-block"
+          className="mb-6 inline-block text-sm text-muted transition hover:text-white"
         >
           &larr; Back to browse
         </a>
 
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-4">
-            <div className="glass p-2 rounded-xl">
+            <div className="glass p-2">
               <ContentViewer content={content} isPlaying={isPlaying} />
             </div>
 
-            <div>
-              <div className="flex items-center gap-3 mb-1">
-                <h1 className="text-2xl font-semibold">{content.title}</h1>
-                <span className="text-[10px] uppercase tracking-wider text-gray-500 border border-neutral-700 px-1.5 py-0.5 rounded">
+            <div className="glass p-6">
+              <div className="mb-3 flex flex-wrap items-center gap-3">
+                <h1 className="text-2xl font-semibold text-white">{content.title}</h1>
+                <span className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] uppercase tracking-[0.24em] text-soft">
                   {typeLabel}
                 </span>
                 {content.isAgent && (
-                  <span className="text-[10px] uppercase tracking-wider text-gray-500 border border-neutral-700 px-1.5 py-0.5 rounded">
+                  <span className="rounded-full border border-white/10 bg-white/[0.06] px-2.5 py-1 text-[10px] uppercase tracking-[0.24em] text-white/80">
                     Agent
                   </span>
                 )}
               </div>
-              <p className="text-gray-400 text-sm leading-relaxed">
-                {content.description}
-              </p>
-              <p className="text-xs text-gray-500 mt-2">
-                by {content.creatorName}
-              </p>
+              <p className="text-sm leading-7 text-muted">{content.description}</p>
+              <p className="mt-3 text-xs text-soft">by {content.creatorName}</p>
             </div>
           </div>
 
@@ -194,12 +190,12 @@ export default function WatchPage() {
               />
 
               {mode === "upfront" && isPlaying && remaining > 0 && (
-                <div className="mt-4 pt-4 border-t border-neutral-800">
-                  <div className="text-xs text-gray-500 mb-1">Time remaining</div>
-                  <div className="text-2xl font-mono text-white tabular-nums">
+                <div className="mt-4 border-t border-white/10 pt-4">
+                  <div className="mb-1 text-xs text-soft">Time remaining</div>
+                  <div className="text-2xl font-mono tabular-nums text-white">
                     {formatTime(remaining)}
                   </div>
-                  <div className="mt-2 w-full h-[2px] bg-neutral-800 rounded-full overflow-hidden">
+                  <div className="mt-2 h-[2px] w-full overflow-hidden rounded-full bg-white/10">
                     <div
                       className="h-full bg-white transition-all duration-1000 ease-linear"
                       style={{ width: "100%" }}

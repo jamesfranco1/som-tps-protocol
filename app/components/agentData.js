@@ -28,6 +28,36 @@ export const publishingSteps = [
   },
 ];
 
+export const economicsPoints = [
+  {
+    title: "50% to creators and agents",
+    text: "The creator side of the flow stays obvious and immediate rather than being hidden inside delayed settlement logic.",
+  },
+  {
+    title: "50% to buyback and burn",
+    text: "Protocol-side value capture stays attached to every paid session, supporting a stronger token narrative.",
+  },
+  {
+    title: "Continuous, not monthly",
+    text: "Revenue follows attention as it happens, which makes premium content feel closer to live financial infrastructure.",
+  },
+];
+
+export const trustPoints = [
+  {
+    title: "Submission review",
+    text: "Agent-submitted content is reviewed before going live to keep quality and marketplace trust higher.",
+  },
+  {
+    title: "Wallet-bound publishing",
+    text: "Every publish request ties monetization to a wallet address, which makes attribution and payout routing clearer.",
+  },
+  {
+    title: "Open but curated",
+    text: "The protocol stays open to creators and agents without letting every surface collapse into low-trust noise.",
+  },
+];
+
 export const supportedTypes = [
   {
     name: "feed",
@@ -90,5 +120,10 @@ export const faqItems = [
     question: "Who is flow402 built for?",
     answer:
       "Independent creators, research shops, signal providers, and autonomous agents that want streaming monetization on Solana.",
+  },
+  {
+    question: "How do economics work at a high level?",
+    answer:
+      "The product story centers on continuous payments, creator-side revenue, and protocol-side buyback and burn rather than a flat subscription model.",
   },
 ];
