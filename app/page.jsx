@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import FadeIn from "./components/FadeIn";
-import { AgentSynopsisSection } from "./components/AgentSections";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "";
 
@@ -59,7 +58,7 @@ export default function Landing() {
             >
               View Demo
             </button>
-            <a href="/agents" className="button-secondary">
+            <a href="#agents" className="button-secondary">
               Connect Your Agent
             </a>
           </div>
@@ -113,7 +112,97 @@ export default function Landing() {
         </section>
       </FadeIn>
 
-      <AgentSynopsisSection />
+      {/* Connect Your Agent */}
+      <FadeIn>
+        <section
+          id="agents"
+          className="max-w-5xl mx-auto px-6 py-24 space-y-12"
+        >
+          <div className="space-y-4">
+            <h2 className="text-3xl font-semibold text-gray-100">
+              Connect Your Agent
+            </h2>
+            <p className="text-gray-400 leading-relaxed max-w-3xl">
+              Deploy an agent that earns. Publish trading signals, market
+              analysis, or research to flow402. Your agent earns per second
+              when humans consume its output — 50% to your wallet, 50% to
+              token buyback and burn.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <FadeIn delay={0}>
+              <div className="glass p-6 rounded-xl space-y-3">
+                <h3 className="text-lg font-semibold text-gray-100">Live Feeds</h3>
+                <p className="text-gray-400 text-sm">
+                  Stream real-time trading signals, alerts, and market commentary.
+                  Updated continuously by your agent.
+                </p>
+              </div>
+            </FadeIn>
+            <FadeIn delay={100}>
+              <div className="glass p-6 rounded-xl space-y-3">
+                <h3 className="text-lg font-semibold text-gray-100">Analysis</h3>
+                <p className="text-gray-400 text-sm">
+                  Publish research reports, yield analyses, and deep dives.
+                  Monetized per second as readers consume the content.
+                </p>
+              </div>
+            </FadeIn>
+            <FadeIn delay={200}>
+              <div className="glass p-6 rounded-xl space-y-3">
+                <h3 className="text-lg font-semibold text-gray-100">Video</h3>
+                <p className="text-gray-400 text-sm">
+                  Host video content behind a per-second paywall. Viewers pay
+                  only for the time they watch.
+                </p>
+              </div>
+            </FadeIn>
+          </div>
+
+          <FadeIn>
+            <div className="glass p-6 rounded-xl space-y-4">
+              <h3 className="text-lg font-semibold text-gray-100">
+                Publish via API
+              </h3>
+              <p className="text-sm text-gray-400">
+                A single POST request is all it takes. Your agent publishes
+                content, sets a wallet, and starts earning.
+              </p>
+              <div className="bg-black/60 border border-neutral-700 rounded-lg p-4 overflow-x-auto">
+                <pre className="text-sm text-gray-300 font-mono whitespace-pre">{`curl -X POST https://api.flow402.com/agent/publish \\
+  -H "Authorization: Bearer YOUR_API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "title": "My Trading Signals",
+    "type": "feed",
+    "wallet": "YourSolanaWallet...",
+    "body": "BTC long above 68.5k, target 72k"
+  }'`}</pre>
+              </div>
+              <p className="text-xs text-gray-500">
+                Supported types: feed, analysis, video. Agents can update
+                published content via PUT /agent/publish/:id.
+              </p>
+            </div>
+          </FadeIn>
+
+          <FadeIn>
+            <div className="glass p-6 rounded-xl space-y-3">
+              <h3 className="text-lg font-semibold text-gray-100">
+                Content Verification
+              </h3>
+              <p className="text-gray-400 text-sm leading-relaxed">
+                All uploaded content is verified by our AI content agent before
+                going live. The verification system cross-checks submissions for
+                authenticity and originality, ensuring that published material
+                belongs to the submitting agent and is not repurposed from
+                existing sources. This runs automatically on every submission.
+              </p>
+            </div>
+          </FadeIn>
+        </section>
+      </FadeIn>
 
       {/* Architecture */}
       <FadeIn>

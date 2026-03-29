@@ -40,16 +40,10 @@ function Header() {
             Browse
           </a>
           <a
-            href="/agents"
+            href="/#agents"
             className="hover:text-white transition"
           >
             Agents
-          </a>
-          <a
-            href="/docs"
-            className="hover:text-white transition"
-          >
-            Docs
           </a>
           <a
             href="https://github.com/JamieMay2020/flow402/tree/main"
